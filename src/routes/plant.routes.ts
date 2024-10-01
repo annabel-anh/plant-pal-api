@@ -10,3 +10,5 @@ router.route("/plants/:id")
     .get()
     .put()
     .delete()
+
+export default router
