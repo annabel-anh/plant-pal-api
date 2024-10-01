@@ -1,13 +1,22 @@
-import prisma from "../src/models/db";
+import prisma from "../src/models/db"
+import { hashPassword } from "../src/utils/auth.utils"
 
 async function main() {
     const mockUsers = await prisma.user.createMany({
-        data: [{
-            first_name: "Alice",
-            last_name: "Smith",
-            email: "alice.smith@prisma.io",
-            password: "Abcd@1234"
-        }, {first_name: "Bob", last_name: "Vance", email: "bob.vance@gmail.com", password: "Sup3r@strong"},]
+        data: [
+            {
+                first_name: "Alice",
+                last_name: "Smith",
+                email: "alice.smith@prisma.io",
+                password: await hashPassword("Abcd@1234"),
+            },
+            {
+                first_name: "Bob",
+                last_name: "Vance",
+                email: "bob.vance@gmail.com",
+                password: await hashPassword("Sup3r@strong"),
+            },
+        ],
     })
 
     const mockLocations = await prisma.location.createMany({
@@ -79,7 +88,7 @@ async function main() {
                 temp_max: 24.0,
                 user_id: 2,
             },
-        ]
+        ],
     })
 
     const mockPlants = await prisma.plant.createMany({
