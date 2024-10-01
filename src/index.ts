@@ -1,6 +1,11 @@
 import express, { Request, Response } from "express"
 import logger from "morgan"
 import cors from "cors"
+import userRoutes from "./routes/user.routes";
+import plantRoutes from "./routes/plant.routes";
+import locationRoutes from "./routes/location.routes";
+import eventRoutes from "./routes/event.routes";
+import eventIntervalRoutes from "./routes/eventInterval.routes";
 
 const app = express()
 const PORT = 3000
@@ -19,4 +24,10 @@ app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}...`)
 })
 
+
+app.use("/users", userRoutes)
+app.use("/plants", plantRoutes)
+app.use("/locations", locationRoutes)
+app.use("/events", eventRoutes)
+app.use("/event-intervals", eventIntervalRoutes)
 export default app

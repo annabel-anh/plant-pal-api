@@ -2,7 +2,7 @@ import {Router} from "express"
 
 const router = Router()
 
-router.route("/users/me")
+router.route("/me")
     .get()
     .put()
     .delete()

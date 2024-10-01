@@ -2,11 +2,11 @@ import { Router } from "express"
 
 const router = Router()
 
-router.route("/plants")
+router.route("/")
     .get()
     .post()
 
-router.route("/plants/:id")
+router.route("/:id")
     .get()
     .put()
     .delete()

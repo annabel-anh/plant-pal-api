@@ -2,16 +2,16 @@ import { Router } from "express";
 
 const router = Router()
 
-router.route("/locations")
+router.route("/")
     .get()
     .post()
 
-router.route("/locations/:id")
+router.route("/:id")
     .get()
     .put()
     .delete()
 
-router.route("/locations/:id/plants")
+router.route("/:id/plants")
     .get()
 
 export default router
