@@ -26,7 +26,6 @@ export const createJWT = (user) => {
         console.log("No JWT secret found in .env file")
         return
     }
-
-    const token = jwt.sign({ userId: user.id, userEmail: user.email }, secret)
+    const token = jwt.sign({ id: user.id, email: user.email }, secret)
     return token
 }

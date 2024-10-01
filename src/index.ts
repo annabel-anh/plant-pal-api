@@ -6,7 +6,6 @@ import apiRoutes from "./routes/api.routes"
 import dotenv from "dotenv"
 
 dotenv.config()
-console.log("JWT Secret:", process.env.JWT_SECRET)
 
 const app = express()
 const PORT = 3000
@@ -25,7 +24,7 @@ app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}...`)
 })
 
-app.use("/", authRoutes)
 app.use("/api/v1", apiRoutes)
+app.use("/", authRoutes)
 
 export default app

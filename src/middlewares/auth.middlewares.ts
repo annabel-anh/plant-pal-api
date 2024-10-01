@@ -9,7 +9,7 @@ export const auth = (req, res, next) => {
         return
     }
 
-    const [, token] = bearer.split(" ")
+    const token = bearer.split(" ")[1]
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
@@ -18,7 +18,6 @@ export const auth = (req, res, next) => {
             console.log(err)
             return
         }
-
         req.user = decoded
         next()
     })

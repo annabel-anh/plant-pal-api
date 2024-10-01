@@ -15,16 +15,22 @@ export const createUser = async (req, res) => {
     return res.json({ token })
 }
 
-export const logIn = async (req, res) => {
+export const signIn = async (req, res) => {
     const user = await prisma.user.findUnique({
         where: {
             email: req.body.email,
         },
     })
 
-    if (comparePasswords(req.body.password, user.password)) {
+    if (!user) {
         res.status(401)
-        res.json({ message: "not authorized" })
+        res.json({ message: "Invalid email or password." })
+    }
+
+    const isValid = await comparePasswords(req.body.password, user.password)
+    if (!isValid) {
+        res.status(401)
+        res.json({ message: "Invalid email or password." })
         return
     }
 
