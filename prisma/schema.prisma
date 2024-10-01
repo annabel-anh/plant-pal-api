@@ -1,0 +1,84 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("POSTGRES_PRISMA_URL")
+}
+
+enum status {
+    HEALTHY
+    SICK
+    DEAD
+}
+
+enum light_condition {
+    BRIGHT
+    MEDIUM
+    DIM
+    DARK
+}
+
+enum event_type {
+    WATERING
+    FERTILIZING
+    PRUNING
+    REPOTTING
+    PEST_CONTROL
+    CLEANING
+}
+
+model user {
+    id         Int        @id @default(autoincrement())
+    first_name String
+    last_name  String
+    email      String     @unique
+    password   String
+    plants     plant[]
+    events     event[]
+    locations  location[]
+}
+
+model plant {
+    id               Int              @id @default(autoincrement())
+    name             String
+    scientific_name  String?
+    bought_date      DateTime?        @default(now())
+    img_url          String?
+    care_requirement Json?
+    health_status    status?          @default(HEALTHY)
+    user             user             @relation(fields: [user_id], references: [id])
+    user_id          Int
+    Location         location?        @relation(fields: [location_id], references: [id])
+    location_id      Int?
+    event_intervals  event_interval[]
+}
+
+model location {
+    id              Int              @id @default(autoincrement())
+    name            String           @unique
+    light_condition light_condition?
+    temp_min        Decimal?
+    temp_max        Decimal?
+    plants          plant[]
+    user            user             @relation(fields: [user_id], references: [id])
+    user_id         Int
+}
+
+model event {
+    id         Int        @id @default(autoincrement())
+    done_date  DateTime   @default(now())
+    note       String?
+    event_type event_type
+    user       user       @relation(fields: [user_id], references: [id])
+    user_id    Int
+}
+
+model event_interval {
+    id         Int        @id @default(autoincrement())
+    event_type event_type
+    num_days   Int        @db.SmallInt // must be > 0
+    Plant      plant      @relation(fields: [plant_id], references: [id])
+    plant_id   Int
+}
