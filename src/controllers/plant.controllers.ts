@@ -1,16 +1,18 @@
 import prisma from "../models/db"
 
 export const getPlants = async (req, res) => {
-    if (!req.user) {
-        res.status(404)
-        res.json({ message: "no user provided" })
-    }
-    console.log(req.user.id)
-    const plants = await prisma.plant.findMany({
-        where: {
-            user_id: req.user.id,
-        },
-    })
+    if (!req.user)
+        return res.status(401).json({ error: "Authentication required." })
 
-    return res.json({ data: plants })
+    try {
+        const plants = await prisma.plant.findMany({
+            where: {
+                user_id: req.user.id,
+            },
+        })
+        return res.json({ data: plants })
+    } catch (error) {
+        console.log(`Error fetching plants for user ${req.user.id}: ${error}`)
+        return res.status(500).json({ error: "Internal server error" })
+    }
 }
