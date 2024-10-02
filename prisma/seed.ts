@@ -2,6 +2,7 @@ import prisma from "../src/models/db"
 import { hashPassword } from "../src/utils/auth.utils"
 
 async function main() {
+    // DO NOT include id in seed data if autoincrement() is used in the schema
     const mockUsers = await prisma.user.createMany({
         data: [
             {
@@ -23,7 +24,6 @@ async function main() {
         data: [
             // Locations for user ID 1
             {
-                id: 1,
                 name: "Living Room",
                 light_condition: "BRIGHT",
                 temp_min: 18.5,
@@ -31,7 +31,6 @@ async function main() {
                 user_id: 1,
             },
             {
-                id: 2,
                 name: "Bedroom",
                 light_condition: "MEDIUM",
                 temp_min: 16.0,
@@ -39,7 +38,6 @@ async function main() {
                 user_id: 1,
             },
             {
-                id: 3,
                 name: "Kitchen",
                 light_condition: "DIM",
                 temp_min: 20.0,
@@ -49,7 +47,6 @@ async function main() {
 
             // Locations for user ID 2
             {
-                id: 4,
                 name: "Home Office",
                 light_condition: "BRIGHT",
                 temp_min: 19.0,
@@ -57,7 +54,6 @@ async function main() {
                 user_id: 2,
             },
             {
-                id: 5,
                 name: "Balcony",
                 light_condition: "BRIGHT",
                 temp_min: 18.0,
@@ -65,7 +61,6 @@ async function main() {
                 user_id: 2,
             },
             {
-                id: 6,
                 name: "Dining Room",
                 light_condition: "MEDIUM",
                 temp_min: 17.0,
@@ -73,7 +68,6 @@ async function main() {
                 user_id: 2,
             },
             {
-                id: 7,
                 name: "Guest Room",
                 light_condition: "DIM",
                 temp_min: 16.0,
@@ -81,7 +75,6 @@ async function main() {
                 user_id: 2,
             },
             {
-                id: 8,
                 name: "Bathroom",
                 light_condition: "DIM",
                 temp_min: 18.0,
@@ -95,7 +88,6 @@ async function main() {
         data: [
             // Plants for user ID 1
             {
-                id: 1,
                 name: "Snake Plant",
                 scientific_name: "Sansevieria trifasciata",
                 bought_date: new Date("2023-01-15"),
@@ -110,7 +102,6 @@ async function main() {
                 location_id: 1,
             },
             {
-                id: 2,
                 name: "Spider Plant",
                 scientific_name: "Chlorophytum comosum",
                 bought_date: new Date("2023-02-01"),
@@ -125,7 +116,6 @@ async function main() {
                 location_id: 2,
             },
             {
-                id: 3,
                 name: "Pothos",
                 scientific_name: "Epipremnum aureum",
                 bought_date: new Date("2023-03-05"),
@@ -140,7 +130,6 @@ async function main() {
                 location_id: 3,
             },
             {
-                id: 4,
                 name: "Peace Lily",
                 scientific_name: "Spathiphyllum",
                 bought_date: new Date("2023-04-20"),
@@ -155,7 +144,6 @@ async function main() {
                 location_id: 1,
             },
             {
-                id: 5,
                 name: "Aloe Vera",
                 scientific_name: "Aloe barbadensis miller",
                 bought_date: new Date("2023-05-15"),
@@ -172,7 +160,6 @@ async function main() {
 
             // Plants for user ID 2
             {
-                id: 6,
                 name: "Fiddle Leaf Fig",
                 scientific_name: "Ficus lyrata",
                 bought_date: new Date("2023-01-20"),
@@ -187,7 +174,6 @@ async function main() {
                 location_id: 4,
             },
             {
-                id: 7,
                 name: "ZZ Plant",
                 scientific_name: "Zamioculcas zamiifolia",
                 bought_date: new Date("2023-02-10"),
@@ -202,7 +188,6 @@ async function main() {
                 location_id: 4,
             },
             {
-                id: 8,
                 name: "Rubber Plant",
                 scientific_name: "Ficus elastica",
                 bought_date: new Date("2023-03-01"),
@@ -217,7 +202,6 @@ async function main() {
                 location_id: 5,
             },
             {
-                id: 9,
                 name: "Boston Fern",
                 scientific_name: "Nephrolepis exaltata",
                 bought_date: new Date("2023-04-05"),

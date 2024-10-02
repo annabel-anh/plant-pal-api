@@ -1,5 +1,8 @@
 import prisma from "../models/db"
 import { comparePasswords, createJWT, hashPassword } from "../utils/auth.utils"
+import logger from "../utils/logger"
+import httpResponses from "../utils/httpResponses.utils"
+import { Request } from "express"
 
 export const createUser = async (req, res) => {
     try {
@@ -11,12 +14,14 @@ export const createUser = async (req, res) => {
                 password: await hashPassword(req.body.password),
             },
         })
-
         const token = createJWT(user)
         return res.json({ token })
     } catch (error) {
-        console.log(`Error creating new user ${req.body.email}: ${error}`)
-        return res.status(500).json({ error: "Internal server error" })
+        logger.error(`Error creating new user`, {
+            email: req.body.email,
+            error: error.message,
+        })
+        return httpResponses.interalServerError(res)
     }
 }
 
@@ -32,16 +37,18 @@ export const signIn = async (req, res) => {
             req.body.password,
             user.password
         )
+
         if (!user || !isPasswordValid) {
-            res.status(401)
-            res.json({ message: "Invalid email or password." })
-            return
+            return httpResponses.authorizationRequired(
+                res,
+                "Invalid email or password."
+            )
         }
 
         const token = createJWT(user)
         return res.json({ token })
     } catch (error) {
-        console.log(`Error signing in.`)
-        return res.status(500).json({ error: "Internal server error" })
+        logger.error("Error signing in.")
+        return httpResponses.interalServerError(res)
     }
 }

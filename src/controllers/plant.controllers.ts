@@ -1,8 +1,11 @@
 import prisma from "../models/db"
+import httpResponses from "../utils/httpResponses.utils"
+import logger from "../utils/logger"
 
 export const getPlants = async (req, res) => {
-    if (!req.user)
-        return res.status(401).json({ error: "Authentication required." })
+    if (!req.user) {
+        return httpResponses.authorizationRequired(res)
+    }
 
     try {
         const plants = await prisma.plant.findMany({
@@ -10,9 +13,42 @@ export const getPlants = async (req, res) => {
                 user_id: req.user.id,
             },
         })
-        return res.json({ data: plants })
+        return httpResponses.sendSuccess(res, 200, plants)
     } catch (error) {
-        console.log(`Error fetching plants for user ${req.user.id}: ${error}`)
-        return res.status(500).json({ error: "Internal server error" })
+        logger.error(`Error fetching plants`, {
+            user_id: req.user.id,
+            error: error.message,
+        })
+        return httpResponses.interalServerError(res)
+    }
+}
+
+export const createPlant = async (req, res) => {
+    if (!req.user) {
+        return httpResponses.authorizationRequired(res)
+    }
+
+    if (!req.body || Object.keys(req.body).length === 0) {
+        return httpResponses.badRequest(res, "Content can't be empty!")
+    }
+
+    const user_id = req.user.id
+    console.log(req.body)
+    const { name, ...rest } = req.body
+
+    if (!name) {
+        return httpResponses.badRequest(res, "Plant name is required.")
+    }
+
+    try {
+        const newPlant = await prisma.plant.create({
+            data: {
+                ...req.body,
+                user_id,
+            },
+        })
+        return httpResponses.created(res, newPlant)
+    } catch (error) {
+        logger.error("Error creating plant", { error: error.message })
     }
 }

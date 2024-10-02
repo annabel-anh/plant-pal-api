@@ -1,37 +1,43 @@
 const httpResponses = {
-    sendError: (res, statusCode, message) => {
+    sendError: function (res, statusCode, message) {
         return res.status(statusCode).json({ error: `${message}` })
     },
 
-    sendSuccess: (res, statusCode, message) => {
-        return res.status(statusCode).json({ message: `${message}` })
+    sendSuccess: function (res, statusCode, data) {
+        if (statusCode === 204) return res.status(statusCode).send()
+        return res.status(statusCode).send(data)
     },
 
-    authorizationRequired: (res) => {
+    authorizationRequired: function (res, message = "Authorization required") {
         const statusCode = 401
-        return httpResponses.sendError(
-            res,
-            statusCode,
-            `${statusCode} Authorization required`
-        )
+        return this.sendError(res, statusCode, `${statusCode} ${message}`)
     },
 
-    interalServerError: (res) => {
+    interalServerError: function (res, message = "Internal server error") {
         const statusCode = 500
-        return httpResponses.sendError(
-            res,
-            statusCode,
-            `${statusCode} Internal server error`
-        )
+        return this.sendError(res, statusCode, `${statusCode} ${message}`)
     },
 
-    notFound: (res) => {
+    notFound: function (res, message = "Not found") {
         const statusCode = 404
-        return httpResponses.sendError(
-            res,
-            statusCode,
-            `${statusCode} Not found`
-        )
+        return this.sendError(res, statusCode, `${statusCode} ${message}`)
+    },
+
+    badRequest: function (res, message = "Bad request") {
+        const statusCode = 400
+        return this.sendError(res, statusCode, `${statusCode} ${message}`)
+    },
+
+    created: function (res, data) {
+        return this.sendSuccess(res, 201, data)
+    },
+
+    deleted: function (res) {
+        return this.sendSuccess(res, 204)
+    },
+
+    updated: function (res, data) {
+        return this.sendSuccess(res, 200, data)
     },
 }
 

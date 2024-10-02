@@ -1,22 +1,20 @@
 import jwt from "jsonwebtoken"
+import httpResponses from "../utils/httpResponses.utils"
+import logger from "../utils/logger"
 
 export const auth = (req, res, next) => {
     const bearer = req.headers.authorization
 
     if (!bearer) {
-        res.status(401)
-        res.json({ message: "not authorized" })
-        return
+        return httpResponses.authorizationRequired(res)
     }
 
     const token = bearer.split(" ")[1]
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-            res.status(401)
-            res.json({ message: "invalid token" })
-            console.log(err)
-            return
+            logger.error(err.message)
+            return httpResponses.authorizationRequired(res)
         }
         req.user = decoded
         next()
