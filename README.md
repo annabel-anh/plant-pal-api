@@ -70,11 +70,36 @@ The API will be available at `http://localhost:3000` (or the port specified in y
 
 ## API Endpoints
 
--   `GET /`: Welcome message
--   `/api/v1/...`: API routes (add more specific endpoints here)
--   `/auth/...`: Authentication routes
+The API provides the following endpoints:
 
-For a complete list of endpoints and their descriptions, please refer to the API documentation (if available).
+### Authentication
+
+-   `POST /signup`: Create a new user account
+-   `POST /signin`: Authenticate a user and receive a token
+
+### Protected Routes
+
+The following routes require authentication (valid token):
+
+#### Users
+
+-   `/users`: User-related operations
+
+#### Plants
+
+-   `/plants`: Plant management operations
+
+#### Locations
+
+-   `/locations`: Location management operations
+
+#### Events
+
+-   `/events`: Event management operations
+
+#### Event Intervals
+
+-   `/event-intervals`: Operations related to event intervals
 
 ## Build
 
