@@ -2,6 +2,25 @@ import prisma from "../models/db"
 import httpResponses from "../utils/httpResponses.utils"
 import logger from "../utils/logger"
 
+const handlePlantException = (req, res, error, action) => {
+    const plantId = Number(req.params.id)
+    const errorMessage = error.message
+
+    if (error.code === "P2025") {
+        logger.error(`Error ${action} plant`, {
+            plantId,
+            error: errorMessage,
+        })
+        return httpResponses.notFound(res, "Plant not found.")
+    } else {
+        logger.error(`Error ${action} plant`, {
+            plantId,
+            error: errorMessage,
+        })
+        return httpResponses.interalServerError(res)
+    }
+}
+
 export const getPlants = async (req, res) => {
     try {
         // TODO include query to filter
@@ -12,11 +31,7 @@ export const getPlants = async (req, res) => {
         })
         return httpResponses.sendSuccess(res, 200, plants)
     } catch (error) {
-        logger.error(`Error fetching plants`, {
-            user_id: req.user.id,
-            error: error.message,
-        })
-        return httpResponses.interalServerError(res)
+        return handlePlantException(req, res, error, "fetching")
     }
 }
 
@@ -41,8 +56,7 @@ export const createPlant = async (req, res) => {
         })
         return httpResponses.created(res, newPlant)
     } catch (error) {
-        logger.error("Error creating plant", { error: error.message })
-        return httpResponses.interalServerError(res)
+        return handlePlantException(req, res, error, "creating")
     }
 }
 
@@ -57,8 +71,7 @@ export const getOnePlant = async (req, res) => {
         console.log(plant)
         return httpResponses.sendSuccess(res, 200, plant)
     } catch (error) {
-        logger.error("Error finding plant", { error: error.message })
-        return httpResponses.notFound(res, "Plant not found.")
+        return handlePlantException(req, res, error, "finding")
     }
 }
 
@@ -79,8 +92,7 @@ export const editPlant = async (req, res) => {
         })
         return httpResponses.updated(res, plant)
     } catch (error) {
-        logger.error("Error finding plant", { error: error.message })
-        return httpResponses.notFound(res, "Plant not found.")
+        return handlePlantException(req, res, error, "updating")
     }
 }
 
@@ -92,7 +104,6 @@ export const deletePlant = async (req, res) => {
         })
         return httpResponses.deleted(res)
     } catch (error) {
-        logger.error("Error finding plant", { error: error.message })
-        return httpResponses.notFound(res, "Plant not found.") // TODO need to fix the error
+        return handlePlantException(req, res, error, "deleting")
     }
 }

@@ -9,7 +9,7 @@ import bodyParser from "body-parser"
 dotenv.config()
 
 const app = express()
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
 app.use(cors())
 app.use(logger("dev"))
@@ -23,11 +23,13 @@ app.get("/", (req, res) => {
     res.send("Welcome to Plant Pal API!")
 })
 
-app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}...`)
-})
-
 app.use("/api/v1", apiRoutes)
 app.use("/", authRoutes)
+
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Listening on port ${PORT}...`)
+    })
+}
 
 export default app

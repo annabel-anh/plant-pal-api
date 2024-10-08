@@ -48,7 +48,7 @@ model plant {
     img_url          String?
     care_requirement Json?
     health_status    status?          @default(HEALTHY)
-    user             user             @relation(fields: [user_id], references: [id])
+    user             user             @relation(fields: [user_id], references: [id], onDelete: Cascade)
     user_id          Int
     Location         location?        @relation(fields: [location_id], references: [id])
     location_id      Int?
@@ -62,7 +62,7 @@ model location {
     temp_min        Decimal?
     temp_max        Decimal?
     plants          plant[]
-    user            user             @relation(fields: [user_id], references: [id])
+    user            user             @relation(fields: [user_id], references: [id], onDelete: Cascade)
     user_id         Int
     @@unique([name, user_id])
 }
@@ -72,7 +72,7 @@ model event {
     done_date  DateTime   @default(now())
     note       String?
     event_type event_type
-    user       user       @relation(fields: [user_id], references: [id])
+    user       user       @relation(fields: [user_id], references: [id], onDelete: Cascade)
     user_id    Int
 }
 
@@ -80,6 +80,6 @@ model event_interval {
     id         Int        @id @default(autoincrement())
     event_type event_type
     num_days   Int        @db.SmallInt // must be > 0
-    Plant      plant      @relation(fields: [plant_id], references: [id])
+    Plant      plant      @relation(fields: [plant_id], references: [id], onDelete: Cascade)
     plant_id   Int
 }
