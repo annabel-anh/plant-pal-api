@@ -57,13 +57,14 @@ model plant {
 
 model location {
     id              Int              @id @default(autoincrement())
-    name            String           @unique
+    name            String           
     light_condition light_condition?
     temp_min        Decimal?
     temp_max        Decimal?
     plants          plant[]
     user            user             @relation(fields: [user_id], references: [id])
     user_id         Int
+    @@unique([name, user_id])
 }
 
 model event {

@@ -4,6 +4,7 @@ import logger from "../utils/logger"
 
 export const getPlants = async (req, res) => {
     try {
+        // TODO include query to filter
         const plants = await prisma.plant.findMany({
             where: {
                 user_id: req.user.id,
@@ -92,6 +93,6 @@ export const deletePlant = async (req, res) => {
         return httpResponses.deleted(res)
     } catch (error) {
         logger.error("Error finding plant", { error: error.message })
-        return httpResponses.notFound(res, "Plant not found.")
+        return httpResponses.notFound(res, "Plant not found.") // TODO need to fix the error
     }
 }
