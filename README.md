@@ -1,6 +1,6 @@
 # Plant Pal API
 
-Plant Pal API is a backend service for managing plant-related information and user authentication.
+Plant Pal is a web app that helps users manage their house plants. The Plant Pal API is the backend service that powers this app. It handles plant data management, user authentication, and core features like care schedules. This is a work in progress.
 
 ## Table of Contents
 
